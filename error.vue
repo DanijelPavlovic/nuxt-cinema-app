@@ -4,7 +4,16 @@
     <p class="mt-7 text-6xl">Ooops.</p>
     <p class="mt-7">{{ error.message }}</p>
 
-    <button class="btn my-7" @click="handleClearError">Go home...</button>
+    <UButton
+      icon="i-heroicons-calendar-days"
+      size="md"
+      color="primary"
+      variant="solid"
+      label="Go home..."
+      block
+      :trailing="false"
+      @click="handleClearError"
+    />
   </div>
 </template>
 

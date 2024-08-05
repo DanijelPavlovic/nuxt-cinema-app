@@ -1,10 +1,7 @@
 <template>
-  <div class="p-4">
-    <h2 class="text-2xl mb-4">
-      Movie id - <strong>{{ movie.id }}</strong>
-    </h2>
-    <h2 class="text-2xl mb-4">
-      Select Your Seat - <strong>{{ movie.title }}</strong>
+  <div class="p-4 bg-white shadow-md rounded-md">
+    <h2 class="text-2xl font-semibold mb-4 text-black">
+      <strong>{{ movie.title }}</strong>
     </h2>
     <div v-if="groupedSeats">
       <div v-for="rowNumber in room.rows" :key="rowNumber" class="mb-4">
@@ -18,7 +15,7 @@
                 ? null
                 : selectSeat(rowNumber, seatNumber)
             "
-            class="flex items-center justify-center p-2 border rounded"
+            class="flex items-center justify-center p-2 border rounded cursor-pointer transition-colors"
           >
             <Icon name="material-symbols:chair" size="18" />
           </div>
@@ -83,12 +80,12 @@ const seatClass = (row: number, seat: number): string => {
     (s) => s.row === row && s.seat === seat
   );
 
-  return `p-2 text-center border rounded cursor-pointer ${
+  return `text-center border rounded cursor-pointer ${
     isSelected
       ? "bg-green-500 text-white"
       : isTaken(seat, row)
-      ? "bg-red-500 text-white !cursor-not-allowed"
-      : "bg-gray-200 cursor-pointer"
+      ? "bg-red-500 text-white cursor-not-allowed"
+      : "bg-gray-300"
   }`;
 };
 
@@ -141,7 +138,7 @@ const confirmBooking = async () => {
     toast.add({
       title: "Failed to book seats",
       color: "red",
-      description: "Your seats have been booked successfully",
+      description: "Your seats could not be booked.",
     });
   }
 };

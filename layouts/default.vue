@@ -7,13 +7,20 @@
       >
         Home
       </nuxt-link>
-      <h1 class="text-2xl font-bold flex-1 text-center">Danijel Cinema App</h1>
+
+      <h1 class="text-2xl font-bold flex-1 text-center">Cinema App</h1>
+      <nuxt-link
+        href="/admin"
+        class="text-blue-500 hover:text-blue-700 font-semibold text-lg mr-4"
+      >
+        Admin
+      </nuxt-link>
     </header>
     <main class="flex-1 p-6">
       <slot />
     </main>
     <footer class="bg-white shadow-md p-4 text-center">
-      <p>© 2024 My Nuxt 3 App</p>
+      <p>© 2024 My Nuxt 3 Cinema App: Danijel Pavlovic</p>
     </footer>
   </div>
 </template>

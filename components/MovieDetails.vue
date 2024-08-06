@@ -1,24 +1,33 @@
 <template>
   <div class="card bg-white shadow-xl rounded-lg overflow-hidden w-full">
-    <figure>
-      <img
-        :src="movie.poster"
-        :alt="movie.title"
-        class="w-full h-auto object-cover"
-        loading="lazy"
-      />
-    </figure>
+    <img
+      :src="movie.poster"
+      :alt="movie.title"
+      class="w-full h-auto object-cover"
+      height="500"
+      width="500"
+      loading="lazy"
+    />
     <div class="p-4">
       <h2 class="text-xl font-semibold mb-4 truncate" :title="movie.title">
         {{ movie.title }}
       </h2>
-      <p class="text-gray-700 mb-2">
-        <strong class="font-medium">Start time:</strong>
-        {{ formatDate(movie.start_time) }}
-      </p>
-      <p class="text-gray-700 mb-4">
-        <strong class="font-medium">Duration:</strong> {{ movie.duration }}
-      </p>
+      <div class="flex justify-between items-center p-2">
+        <div class="text-left">
+          <strong class="font-medium">Start time:</strong>
+        </div>
+        <div class="text-right">
+          {{ formatDate(movie.start_time) }}
+        </div>
+      </div>
+      <div class="flex justify-between items-center p-2">
+        <div class="text-left">
+          <strong class="font-medium">Duration:</strong>
+        </div>
+        <div class="text-right">
+          {{ movie.duration }}
+        </div>
+      </div>
       <UButton
         icon="i-heroicons-calendar-days"
         size="md"

@@ -1,7 +1,9 @@
 <template>
-  <div class="card bg-white shadow-lg rounded-lg p-6">
+  <div class="card shadow-lg rounded-lg p-6">
     <div class="text-center mb-8">
-      <h1 class="text-3xl font-semibold text-gray-800">{{ room.name }}</h1>
+      <h1 class="text-3xl text-white font-semibold text-gray-800">
+        Room - {{ room.name }}
+      </h1>
     </div>
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"

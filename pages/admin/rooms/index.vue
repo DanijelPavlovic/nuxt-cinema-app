@@ -1,19 +1,35 @@
 <template>
-  <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
-    <UInput v-model="q" class="bg-white" placeholder="Filter rooms..." />
-    <UButton class="ml-4" label="Create room" @click="toggleModal" />
-  </div>
-  <UTable :rows="filteredRows" :columns="columns">
-    <template #actions-data="{ row }">
-      <UDropdown :items="actions(row)">
-        <UButton
-          color="gray"
-          variant="ghost"
-          icon="i-heroicons-ellipsis-horizontal-20-solid"
-        />
-      </UDropdown>
-    </template>
-  </UTable>
+  <UCard
+    class="w-full p-6"
+    :ui="{
+      base: '',
+      ring: '',
+      divide: 'divide-y divide-gray-200 dark:divide-gray-700',
+      header: { padding: 'px-4 py-5' },
+      body: {
+        padding: '',
+        base: 'divide-y divide-gray-200 dark:divide-gray-700',
+      },
+      footer: { padding: 'p-4' },
+    }"
+  >
+    <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+      <UInput v-model="filterText" placeholder="Filter rooms..." />
+      <UButton class="ml-4" label="Create room" @click="toggleModal" />
+    </div>
+    <UTable :rows="filteredRows" :columns="columns">
+      <template #actions-data="{ row }">
+        <UDropdown :items="actions(row)">
+          <UButton
+            color="gray"
+            variant="ghost"
+            icon="i-heroicons-ellipsis-horizontal-20-solid"
+          />
+        </UDropdown>
+      </template>
+    </UTable>
+  </UCard>
+
   <UModal v-model="isModalVisible">
     <LazyAdminRoomForm ref="modalRef" :room="toEdit" @close="onFormClose" />
   </UModal>
@@ -36,7 +52,7 @@ onClickOutside(modalRef, (event) => {
   toEdit = null;
 });
 
-const q = ref<string>("");
+const filterText = ref<string>("");
 const rooms = ref<Room[] | null>(null);
 
 const fetchRooms = async () => {
@@ -98,7 +114,7 @@ const actions = (row: {
 ];
 
 const filteredRows = computed<{ [key: string]: any }[]>(() => {
-  if (!q.value) {
+  if (!filterText.value) {
     return rooms.value ?? [];
   }
 
@@ -108,7 +124,9 @@ const filteredRows = computed<{ [key: string]: any }[]>(() => {
 
   return rooms.value.filter((room) => {
     return Object.values(room).some((value) => {
-      return String(value).toLowerCase().includes(q.value.toLowerCase());
+      return String(value)
+        .toLowerCase()
+        .includes(filterText.value.toLowerCase());
     });
   });
 });

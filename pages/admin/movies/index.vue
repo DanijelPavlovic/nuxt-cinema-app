@@ -1,19 +1,35 @@
 <template>
-  <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
-    <UInput v-model="q" class="bg-white" placeholder="Filter movies..." />
-    <UButton class="ml-4" label="Create movie" @click="toggleModal" />
-  </div>
-  <UTable :rows="filteredRows" :columns="columns">
-    <template #actions-data="{ row }">
-      <UDropdown :items="actions(row)">
-        <UButton
-          color="gray"
-          variant="ghost"
-          icon="i-heroicons-ellipsis-horizontal-20-solid"
-        />
-      </UDropdown>
-    </template>
-  </UTable>
+  <UCard
+    class="w-full p-6"
+    :ui="{
+      base: '',
+      ring: '',
+      divide: 'divide-y divide-gray-200 dark:divide-gray-700',
+      header: { padding: 'px-4 py-5' },
+      body: {
+        padding: '',
+        base: 'divide-y divide-gray-200 dark:divide-gray-700',
+      },
+      footer: { padding: 'p-4' },
+    }"
+  >
+    <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
+      <UInput v-model="filterText" placeholder="Filter movies..." />
+      <UButton class="ml-4" label="Create movie" @click="toggleModal" />
+    </div>
+    <UTable :rows="filteredRows" :columns="columns">
+      <template #actions-data="{ row }">
+        <UDropdown :items="actions(row)">
+          <UButton
+            color="gray"
+            variant="ghost"
+            icon="i-heroicons-ellipsis-horizontal-20-solid"
+          />
+        </UDropdown>
+      </template>
+    </UTable>
+  </UCard>
+
   <UModal v-model="isModalVisible">
     <LazyAdminMovieForm
       ref="modalRef"
@@ -35,12 +51,12 @@ const { visible: isModalVisible, onToggle: toggleModal } = useToggle();
 const modalRef = ref(null);
 let toEdit: Movie | null = null;
 
-// onClickOutside(modalRef, (event) => {
-//   toggleModal();
-//   toEdit = null;
-// });
+onClickOutside(modalRef, (event) => {
+  toggleModal;
+  toEdit = null;
+});
 
-const q = ref<string>("");
+const filterText = ref<string>("");
 const movies = ref<Movie[] | null>(null);
 
 const fetchMovies = async () => {
@@ -104,7 +120,7 @@ const actions = (row: {
 ];
 
 const filteredRows = computed<{ [key: string]: any }[]>(() => {
-  if (!q.value) {
+  if (!filterText.value) {
     return movies.value ?? [];
   }
 
@@ -114,7 +130,9 @@ const filteredRows = computed<{ [key: string]: any }[]>(() => {
 
   return movies.value.filter((movie) => {
     return Object.values(movie).some((value) => {
-      return String(value).toLowerCase().includes(q.value.toLowerCase());
+      return String(value)
+        .toLowerCase()
+        .includes(filterText.value.toLowerCase());
     });
   });
 });
@@ -144,23 +162,25 @@ const onEdit = async (id: number) => {
 };
 
 const onDelete = async (id: number) => {
-  try {
-    await $fetch(`/api/movies/${id}`, {
-      method: "DELETE",
-    });
+  const { data, error } = await useFetch(`/api/movies/${id}`, {
+    method: "DELETE",
+  });
 
-    showToast({
-      title: "Movie deleted",
-      description: "Movie has been deleted successfully",
-    });
-
-    await fetchMovies();
-  } catch (err) {
+  if (error.value) {
     showToast({
       title: "Failed to delete movie",
       color: "red",
       description: "Failed to delete movie",
     });
+
+    return;
   }
+
+  showToast({
+    title: "Movie deleted",
+    description: "Movie has been deleted successfully",
+  });
+
+  await fetchMovies();
 };
 </script>

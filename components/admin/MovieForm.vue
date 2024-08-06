@@ -1,72 +1,75 @@
 <template>
-  <div>
-    <h2>{{ movie ? "Update" : "Create" }} Movie</h2>
+  <div class="flex items-center justify-between p-4">
+    <h2 class="text-xl font-bold">{{ movie ? "Update" : "Create" }} Movie</h2>
+    <UButton icon="i-heroicons-x-mark" @click="emits('close')" />
   </div>
-  <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-    <UFormGroup label="Room" name="room_id">
-      <USelectMenu
-        v-model="state.room_id"
-        :options="rooms"
-        placeholder="Select room..."
-        value-attribute="id"
-        option-attribute="name"
-      />
-    </UFormGroup>
-
-    <UFormGroup label="Title" name="title">
-      <UInput v-model="state.title" />
-    </UFormGroup>
-
-    <UFormGroup label="Duration" name="duration">
-      <UInput v-model="state.duration" type="number" />
-    </UFormGroup>
-
-    <UFormGroup label="Start time" name="start_time">
-      <UPopover :popper="{ placement: 'bottom-start' }">
-        <UButton
-          icon="i-heroicons-calendar-days-20-solid"
-          :label="format(state.start_time, 'd MMM, yyy')"
+  <div class="p-6">
+    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+      <UFormGroup label="Room" name="room_id">
+        <USelectMenu
+          v-model="state.room_id"
+          :options="rooms"
+          placeholder="Select room..."
+          value-attribute="id"
+          option-attribute="name"
         />
-        <template #panel="{ close }">
-          <ElementsDatePicker
-            v-model="state.start_time"
-            is-required
-            @close="close"
+      </UFormGroup>
+
+      <UFormGroup label="Title" name="title">
+        <UInput v-model="state.title" />
+      </UFormGroup>
+
+      <UFormGroup label="Duration" name="duration">
+        <UInput v-model="state.duration" type="number" />
+      </UFormGroup>
+
+      <UFormGroup label="Start time" name="start_time">
+        <UPopover :popper="{ placement: 'bottom-start' }">
+          <UButton
+            icon="i-heroicons-calendar-days-20-solid"
+            :label="format(state.start_time, 'd MMM, yyy')"
           />
-        </template>
-      </UPopover>
-    </UFormGroup>
+          <template #panel="{ close }">
+            <ElementsDatePicker
+              v-model="state.start_time"
+              is-required
+              @close="close"
+            />
+          </template>
+        </UPopover>
+      </UFormGroup>
 
-    <UFormGroup label="Poster" name="poster">
-      <template v-if="movie && state.poster && !files?.length">
-        <img
-          v-if="state.poster"
-          :src="state.poster"
-          alt="poster"
-          class="w-32 h-32"
-        />
+      <UFormGroup label="Poster" name="poster" class="pb-6">
+        <template v-if="movie && state.poster && !files?.length">
+          <img
+            v-if="state.poster"
+            :src="state.poster"
+            alt="poster"
+            class="w-32 h-32"
+          />
 
-        <UButton
-          class="mr-2"
-          type="button"
-          label="Change poster"
-          @click="state.poster = undefined"
-        />
-      </template>
-      <template v-else>
-        <div>
           <UButton
             class="mr-2"
             type="button"
-            label="Choose files"
-            @click="open()"
+            label="Change poster"
+            @click="state.poster = undefined"
           />
-          <UButton
-            type="button"
-            label="Reset"
-            :disabled="!files"
-            @click="reset()"
-          />
+        </template>
+        <template v-else>
+          <div class="flex mb-4">
+            <UButton
+              class="mr-4"
+              type="button"
+              label="Choose files"
+              @click="open()"
+            />
+            <UButton
+              type="button"
+              label="Reset"
+              :disabled="!files"
+              @click="reset()"
+            />
+          </div>
           <template v-if="files">
             <p>
               You have selected:
@@ -78,12 +81,12 @@
               {{ file.name }}
             </li>
           </template>
-        </div>
-      </template>
-    </UFormGroup>
+        </template>
+      </UFormGroup>
 
-    <UButton type="submit"> Submit </UButton>
-  </UForm>
+      <UButton block type="submit"> Submit </UButton>
+    </UForm>
+  </div>
 </template>
 
 <script setup lang="ts">

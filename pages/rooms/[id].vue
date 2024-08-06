@@ -1,6 +1,21 @@
 <template>
-  <RoomDetails v-if="room" :room="room" :movies="movies" />
-  <div v-else>Loading...</div>
+  <UCard
+    class="w-full h-screen"
+    :ui="{
+      base: '',
+      ring: '',
+      divide: 'divide-y divide-gray-200 dark:divide-gray-700',
+      header: { padding: 'px-4 py-5' },
+      body: {
+        padding: '',
+        base: 'divide-y divide-gray-200 dark:divide-gray-700',
+      },
+      footer: { padding: 'p-4' },
+    }"
+  >
+    <RoomDetails v-if="room" :room="room" :movies="movies" />
+    <div v-else>Loading...</div>
+  </UCard>
 </template>
 
 <script setup lang="ts">

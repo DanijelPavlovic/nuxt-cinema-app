@@ -1,26 +1,13 @@
 <template>
-  <UCard
-    class="w-full h-screen"
-    :ui="{
-      base: '',
-      ring: '',
-      divide: 'divide-y divide-gray-200 dark:divide-gray-700',
-      header: { padding: 'px-4 py-5' },
-      body: {
-        padding: '',
-        base: 'divide-y divide-gray-200 dark:divide-gray-700',
-      },
-      footer: { padding: 'p-4' },
-    }"
-  >
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl py-16 sm:py-24 lg:max-w-none lg:py-32">
+  <UCard>
+    <div class="mx-auto">
+      <div class="mx-auto max-w-none">
         <h2 class="text-2xl font-bold text-white p-6">Rooms</h2>
         <p class="font-bold text-white p-6">
-          Please select a room to see the movie list
+          Please select a room to see the movies
         </p>
         <div
-          class="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0"
+          class="mt-6 space-y-6 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0"
         >
           <RoomCard v-for="room in rooms" :key="room.id" :room="room" />
         </div>

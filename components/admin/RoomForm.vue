@@ -1,24 +1,31 @@
 <template>
-  <div class="flex items-center justify-between p-4">
-    <h2 class="text-xl font-bold">{{ room ? "Update" : "Create" }} Room</h2>
-    <UButton icon="i-heroicons-x-mark" @click="emits('close')" />
-  </div>
-  <div class="p-6">
-    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-      <UFormGroup label="Name" name="name">
-        <UInput v-model="state.name" />
-      </UFormGroup>
+  <div>
+    <div class="flex items-center justify-between p-4">
+      <h2 class="text-xl font-bold">{{ room ? "Update" : "Create" }} Room</h2>
+      <UButton icon="i-heroicons-x-mark" @click="emits('close')" />
+    </div>
+    <div class="p-6">
+      <UForm
+        :schema="schema"
+        :state="state"
+        class="space-y-4"
+        @submit="onSubmit"
+      >
+        <UFormGroup label="Name" name="name">
+          <UInput v-model="state.name" />
+        </UFormGroup>
 
-      <UFormGroup label="Number of rows" name="rows">
-        <UInput v-model="state.rows" type="number" />
-      </UFormGroup>
+        <UFormGroup label="Number of rows" name="rows">
+          <UInput v-model="state.rows" type="number" />
+        </UFormGroup>
 
-      <UFormGroup label="Seats per row" name="seats_per_row" class="pb-6">
-        <UInput v-model="state.seats_per_row" type="number" />
-      </UFormGroup>
+        <UFormGroup label="Seats per row" name="seats_per_row" class="pb-6">
+          <UInput v-model="state.seats_per_row" type="number" />
+        </UFormGroup>
 
-      <UButton block ype="submit"> Submit </UButton>
-    </UForm>
+        <UButton block ype="submit"> Submit </UButton>
+      </UForm>
+    </div>
   </div>
 </template>
 

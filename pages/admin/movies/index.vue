@@ -52,7 +52,7 @@ const modalRef = ref(null);
 let toEdit: Movie | null = null;
 
 onClickOutside(modalRef, (event) => {
-  toggleModal;
+  toggleModal();
   toEdit = null;
 });
 

@@ -49,7 +49,6 @@ const { visible: isModalVisible, onToggle: toggleModal } = useToggle();
 const modalRef = ref(null);
 
 onClickOutside(modalRef, (event) => {
-  console.log(event);
   toggleModal();
 });
 const { movie, room } = defineProps(["movie", "room"]);

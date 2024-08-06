@@ -121,21 +121,20 @@ const confirmBooking = async () => {
   }
 
   try {
-    const response = await $fetch(`/api/movies/bookSeat/${movie.id}`, {
+    await $fetch(`/api/movies/bookSeat/${movie.id}`, {
       method: "POST",
       body: {
         seats: selectedSeats.value,
       },
     });
 
-    console.log("BOOK RESPONSE", response);
     emits("booked");
-    toast.add({
+    showToast({
       title: "Seats booked",
       description: "Your seats have been booked successfully",
     });
   } catch (err) {
-    toast.add({
+    showToast({
       title: "Failed to book seats",
       color: "red",
       description: "Your seats could not be booked.",

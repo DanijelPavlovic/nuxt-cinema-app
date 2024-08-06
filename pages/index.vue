@@ -2,14 +2,36 @@
   <UCard>
     <div class="mx-auto">
       <div class="mx-auto max-w-none">
+        <div class="flex justify-center py-6">
+          <input
+            type="text"
+            placeholder="Search rooms"
+            class="px-4 py-2 border border-gray-300 rounded"
+            v-model="searchQuery"
+          />
+        </div>
         <h2 class="text-2xl font-bold text-white p-6">Rooms</h2>
         <p class="font-bold text-white p-6">
           Please select a room to see the movies
         </p>
         <div
-          class="mt-6 space-y-6 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0"
+          class="mt-6 space-y-6 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0 mb-4"
         >
-          <RoomCard v-for="room in rooms" :key="room.id" :room="room" />
+          <RoomCard
+            :ui="{
+              body: {
+                base: '',
+                background: 'bg-blue-950',
+                padding: 'px-4 py-5 sm:p-6',
+              },
+            }"
+            v-for="(room, index) in filteredRooms"
+            :key="room.id"
+            :room="room"
+            :class="{
+              'mv-6': index >= 3 && index < 6,
+            }"
+          />
         </div>
       </div>
     </div>
@@ -18,7 +40,10 @@
 
 <script setup lang="ts">
 import type { NuxtApp } from "#app";
+import { computed, ref } from "vue";
 import type { Room } from "~/types";
+
+const searchQuery = ref("");
 
 const { data: rooms }: { data: Ref<Room[]> } = await useAsyncData(
   "rooms",
@@ -37,4 +62,10 @@ const { data: rooms }: { data: Ref<Room[]> } = await useAsyncData(
     },
   }
 );
+
+const filteredRooms = computed(() => {
+  return rooms.value.filter((room) =>
+    room.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
 </script>

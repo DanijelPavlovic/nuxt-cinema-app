@@ -4,13 +4,13 @@
   </div>
   <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
     <UFormGroup label="Room" name="room_id">
-      <UDropdown :items="rooms" :popper="{ placement: 'bottom-start' }">
-        <UButton
-          color="white"
-          label="Select room"
-          trailing-icon="i-heroicons-chevron-down-20-solid"
-        />
-      </UDropdown>
+      <USelectMenu
+        v-model="state.room_id"
+        :options="rooms"
+        placeholder="Select room..."
+        value-attribute="id"
+        option-attribute="name"
+      />
     </UFormGroup>
 
     <UFormGroup label="Title" name="title">
@@ -38,28 +38,47 @@
     </UFormGroup>
 
     <UFormGroup label="Poster" name="poster">
-      <UButton
-        class="mr-2"
-        type="button"
-        label="Choose files"
-        @click="open()"
-      />
-      <UButton
-        type="button"
-        label="Reset"
-        :disabled="!files"
-        @click="reset()"
-      />
-      <template v-if="files">
-        <p>
-          You have selected:
-          <b>{{
-            `${files.length} ${files.length === 1 ? "file" : "files"}`
-          }}</b>
-        </p>
-        <li v-for="file of files" :key="file.name">
-          {{ file.name }}
-        </li>
+      <template v-if="movie && state.poster && !files?.length">
+        <img
+          v-if="state.poster"
+          :src="state.poster"
+          alt="poster"
+          class="w-32 h-32"
+        />
+
+        <UButton
+          class="mr-2"
+          type="button"
+          label="Change poster"
+          @click="state.poster = undefined"
+        />
+      </template>
+      <template v-else>
+        <div>
+          <UButton
+            class="mr-2"
+            type="button"
+            label="Choose files"
+            @click="open()"
+          />
+          <UButton
+            type="button"
+            label="Reset"
+            :disabled="!files"
+            @click="reset()"
+          />
+          <template v-if="files">
+            <p>
+              You have selected:
+              <b>{{
+                `${files.length} ${files.length === 1 ? "file" : "files"}`
+              }}</b>
+            </p>
+            <li v-for="file of files" :key="file.name">
+              {{ file.name }}
+            </li>
+          </template>
+        </div>
       </template>
     </UFormGroup>
 
@@ -68,9 +87,8 @@
 </template>
 
 <script setup lang="ts">
-import type { FormSubmitEvent } from "#ui/types";
 import { format } from "date-fns";
-import { mixed, number, object, string, type InferType } from "yup";
+import { mixed, number, object, string } from "yup";
 const { files, open, reset, onChange } = useFileDialog({});
 
 const emits = defineEmits(["close"]);
@@ -80,48 +98,55 @@ const { movie } = defineProps(["movie", "rooms"]);
 const schema = object({
   title: string().required("Required"),
   duration: number().min(1, "Must be at least 1 row").required("Required"),
-  poster: mixed().required("Required"),
   start_time: mixed().required("Required"),
   room_id: number().required("Required"),
 });
 
-type Schema = InferType<typeof schema>;
-
 const state = reactive({
   title: movie ? movie.title : undefined,
   duration: movie ? movie.duration : undefined,
-  start_time: movie ? movie.start_time : new Date(),
+  start_time: movie ? new Date(movie.start_time) : new Date(),
   poster: movie ? movie.poster : undefined,
   room_id: movie ? movie.room_id : undefined,
 });
 
 onChange((files) => {
-  console.log("FILES", files);
-  /** do something with files */
-  state.poster = files[0];
+  if (files && files.length) {
+    state.poster = files[0];
+  }
 });
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const formData = new FormData();
-  formData.append("title", state.title || "");
-  formData.append("duration", state.duration?.toString() || "");
-  formData.append("start_time", state.start_time.toISOString());
+const dayjs = useDayjs();
 
-  if (state.poster) {
-    formData.append("poster", state.poster);
-  }
-
-  movie ? await update(event.data, movie.id) : await create(event.data);
+async function onSubmit() {
+  movie
+    ? await update(appendFormData(), movie.id)
+    : await create(appendFormData());
   emits("close");
 }
 
-const create = async (body: Schema) => {
+const appendFormData = () => {
+  const formData = new FormData();
+
+  formData.append("title", state.title || "");
+  formData.append("duration", state.duration?.toString() || "");
+  formData.append("room_id", state.room_id?.toString() || "");
+
+  formData.append(
+    "start_time",
+    dayjs(state.start_time).format("YYYY-MM-DD HH:mm:ss")
+  );
+
+  if (state.poster && state.poster) {
+    formData.append("poster", state.poster);
+  }
+
+  return formData;
+};
+
+const create = async (body: FormData) => {
   try {
     await $fetch(`/api/movies`, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        "X-Requested-With": "XMLHttpRequest",
-      },
       method: "POST",
       body,
     });
@@ -134,15 +159,15 @@ const create = async (body: Schema) => {
     showToast({
       title: "Create failed",
       color: "red",
-      description: "Failed to create movie",
+      description: err.data.message,
     });
   }
 };
 
-const update = async (body: Schema, id: number) => {
+const update = async (body: FormData, id: number) => {
   try {
     await $fetch(`/api/movies/${id}`, {
-      method: "PUT",
+      method: "POST",
       body,
     });
     showToast({
@@ -153,7 +178,7 @@ const update = async (body: Schema, id: number) => {
     showToast({
       title: "Update failed",
       color: "red",
-      description: "Failed to update movie",
+      description: err.data.message,
     });
   }
 };

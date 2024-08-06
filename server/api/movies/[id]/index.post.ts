@@ -1,6 +1,6 @@
 export default defineEventHandler(async (event) => {
   const { apiBaseUrl } = useRuntimeConfig();
-
+  const id = getRouterParam(event, "id");
   const mpfd = await readFormData(event);
 
   if (!mpfd) {
@@ -10,7 +10,9 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const data = await $fetch(`${apiBaseUrl}/movies`, {
+  console.log("mpfd", mpfd);
+
+  const data = await $fetch(`${apiBaseUrl}/movies/update/${id}`, {
     headers: {
       "X-Requested-With": "XMLHttpRequest",
     },

@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-white shadow-xl rounded-lg overflow-hidden w-full">
+  <div class="card bg-neutral-800 rounded-lg overflow-hidden w-full">
     <img
       :src="movie.poster"
       :alt="movie.title"
@@ -29,6 +29,7 @@
         </div>
       </div>
       <UButton
+        class="mt-4"
         icon="i-heroicons-calendar-days"
         size="md"
         color="primary"

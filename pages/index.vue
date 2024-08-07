@@ -5,13 +5,13 @@
         <div class="flex justify-center py-6">
           <input
             type="text"
-            placeholder="Search rooms"
-            class="px-4 py-2 border border-gray-300 rounded"
-            v-model="searchQuery"
+            placeholder="Search rooms..."
+            class="px-4 py-2 w-full max-w-[320px] border border-neutral-700 rounded"
+            v-model.trim="searchQuery"
           />
         </div>
-        <h2 class="text-2xl font-bold text-white p-6">Rooms</h2>
-        <p class="font-bold text-white p-6">
+        <h2 class="text-2xl font-bold mb-4">Rooms</h2>
+        <p class="font-bold text-neutral-400">
           Please select a room to see the movies
         </p>
         <div
@@ -21,7 +21,7 @@
             :ui="{
               body: {
                 base: '',
-                background: 'bg-blue-950',
+                background: 'bg-neutral-800',
                 padding: 'px-4 py-5 sm:p-6',
               },
             }"

@@ -1,6 +1,6 @@
 <template>
-  <div class="p-4 bg-white shadow-md rounded-md">
-    <h2 class="text-2xl font-semibold mb-4 text-black">
+  <div class="p-4 shadow-md rounded-md">
+    <h2 class="text-2xl font-semibold mb-4">
       <strong>{{ movie.title }}</strong>
     </h2>
     <div v-if="groupedSeats">
@@ -15,7 +15,7 @@
                 ? null
                 : selectSeat(rowNumber, seatNumber)
             "
-            class="flex items-center justify-center p-2 border rounded cursor-pointer transition-colors"
+            class="flex items-center justify-center p-2 border border-neutral-500 rounded cursor-pointer transition-colors"
           >
             <Icon name="material-symbols:chair" size="18" />
           </div>
@@ -82,10 +82,10 @@ const seatClass = (row: number, seat: number): string => {
 
   return `text-center border rounded cursor-pointer ${
     isSelected
-      ? "bg-green-500 text-white"
+      ? "bg-green-600 text-white"
       : isTaken(seat, row)
-      ? "bg-red-500 text-white cursor-not-allowed"
-      : "bg-gray-300"
+      ? "bg-red-600 text-white cursor-not-allowed"
+      : "bg-neutral-800"
   }`;
 };
 

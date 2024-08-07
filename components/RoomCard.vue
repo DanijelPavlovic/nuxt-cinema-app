@@ -19,7 +19,7 @@
       >
         <img
           src="/img/room-placeholder.webp"
-          alt=""
+          :alt="room.name"
           class="h-full w-full object-cover object-center"
         />
       </div>

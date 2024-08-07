@@ -1,31 +1,20 @@
 <template>
-  <UCard
-    class="w-full p-6"
-    :ui="{
-      base: '',
-      ring: '',
-      divide: 'divide-y divide-gray-200 dark:divide-gray-700',
-      header: { padding: 'px-4 py-5' },
-      body: {
-        padding: '',
-        base: 'divide-y divide-gray-200 dark:divide-gray-700',
-      },
-      footer: { padding: 'p-4' },
-    }"
-  >
+  <UCard class="w-full">
     <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
       <UInput v-model="filterText" placeholder="Filter rooms..." />
       <UButton class="ml-4" label="Create room" @click="toggleModal" />
     </div>
     <UTable :rows="filteredRows" :columns="columns">
       <template #actions-data="{ row }">
-        <UDropdown :items="actions(row)">
-          <UButton
-            color="gray"
-            variant="ghost"
-            icon="i-heroicons-ellipsis-horizontal-20-solid"
-          />
-        </UDropdown>
+        <div class="flex justify-end">
+          <UDropdown :items="actions(row)">
+            <UButton
+              color="blue"
+              variant="ghost"
+              icon="i-heroicons-ellipsis-horizontal-20-solid"
+            />
+          </UDropdown>
+        </div>
       </template>
     </UTable>
   </UCard>

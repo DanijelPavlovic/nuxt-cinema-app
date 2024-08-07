@@ -32,6 +32,7 @@
         <UFormGroup label="Start time" name="start_time">
           <UPopover :popper="{ placement: 'bottom-start' }">
             <UButton
+              class="w-full"
               icon="i-heroicons-calendar-days-20-solid"
               :label="format(state.start_time, 'd MMM, yyy')"
             />
@@ -47,19 +48,21 @@
 
         <UFormGroup label="Poster" name="poster" class="pb-6">
           <template v-if="movie && state.poster && !files?.length">
-            <img
-              v-if="state.poster"
-              :src="state.poster"
-              alt="poster"
-              class="w-32 h-32"
-            />
-
-            <UButton
-              class="mr-2"
-              type="button"
-              label="Change poster"
-              @click="state.poster = undefined"
-            />
+           <div class="flex flex-col gap-2">
+             <img
+                 v-if="state.poster"
+                 :src="state.poster"
+                 alt="poster"
+                 class="w-32 h-32 mx-auto"
+             />
+             <div class="flex justify-center">
+               <UButton
+                   type="button"
+                   label="Change poster"
+                   @click="state.poster = undefined"
+               />
+             </div>
+           </div>
           </template>
           <template v-else>
             <div class="flex mb-4">

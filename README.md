@@ -6,8 +6,11 @@
 Make sure to install the dependencies:
 
 ```bash
-# node version is v22.5.1 defined in the .nvmrc file
-# mkae an .env file from the .env.example
+# node version is defined in the .nvmrc file
+v22.5.1
+
+# make an .env file from the .env.example
+
 # npm
 npm install
 ```
